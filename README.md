@@ -5,8 +5,10 @@
 A minimal Claude Code plugin that stamps every user prompt with the current date and time:
 
 ```
-[2026-07-08 18:29 +0800]
+[2026-07-08 20:53 +0800 | elapsed since previous stamp]
 ```
+
+Not just "what time is it now" — the trailing hint prompts the model to look back at the previous stamp in the conversation and work out **how much time passed between messages**: how long a session sat idle, whether that status check was 5 minutes or 5 hours ago.
 
 ## Why
 
@@ -35,10 +37,12 @@ Restart Claude Code after installing (hooks load at session start).
 On every prompt you submit, the hook runs:
 
 ```bash
-date '+[%Y-%m-%d %H:%M %z]'
+date '+[%Y-%m-%d %H:%M %z | elapsed since previous stamp]'
 ```
 
 The output is injected as context alongside your message. The `%z` offset (`+0800`, `-0500`, …) makes the timestamp unambiguous in any timezone — no configuration needed.
+
+The `| elapsed since previous stamp` part is a **static hint, not a computed value**: the previous timestamp already lives in the conversation history, so the model can derive the gap itself. No state file, no cross-session bookkeeping, no concurrency issues — the context window *is* the state.
 
 That's the whole plugin. No dependencies, no network access, no state.
 
@@ -55,7 +59,7 @@ Add this to `~/.claude/settings.json`:
         "hooks": [
           {
             "type": "command",
-            "command": "date '+[%Y-%m-%d %H:%M %z]'"
+            "command": "date '+[%Y-%m-%d %H:%M %z | elapsed since previous stamp]'"
           }
         ]
       }

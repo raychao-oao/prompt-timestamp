@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "date '+[%Y-%m-%d %H:%M %z]'",
+            "command": "date '+[%Y-%m-%d %H:%M %z | elapsed since previous stamp]'",
             "timeout": 5
           }
         ]
