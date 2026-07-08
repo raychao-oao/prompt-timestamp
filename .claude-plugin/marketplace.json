@@ -1,0 +1,20 @@
+{
+  "name": "prompt-timestamp",
+  "owner": {
+    "name": "Ray Chao",
+    "email": "ray.chao@oao.tw"
+  },
+  "plugins": [
+    {
+      "name": "prompt-timestamp",
+      "description": "Stamps every user prompt with the current date and time, giving Claude real time-awareness throughout the session",
+      "version": "1.0.0",
+      "author": {
+        "name": "Ray Chao",
+        "email": "ray.chao@oao.tw"
+      },
+      "source": "./",
+      "category": "utilities"
+    }
+  ]
+}

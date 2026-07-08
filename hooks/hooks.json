@@ -1,0 +1,17 @@
+{
+  "description": "Prepend a timestamp to every user prompt so Claude knows the current time",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "date '+[%Y-%m-%d %H:%M %z]'",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

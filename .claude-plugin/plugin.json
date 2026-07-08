@@ -1,0 +1,13 @@
+{
+  "name": "prompt-timestamp",
+  "description": "Stamps every user prompt with the current date and time, giving Claude real time-awareness throughout the session",
+  "version": "1.0.0",
+  "author": {
+    "name": "Ray Chao",
+    "email": "ray.chao@oao.tw"
+  },
+  "homepage": "https://github.com/raychao-oao/prompt-timestamp",
+  "repository": "https://github.com/raychao-oao/prompt-timestamp",
+  "license": "MIT",
+  "keywords": ["hooks", "timestamp", "time-awareness", "context"]
+}
