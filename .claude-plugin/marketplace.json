@@ -8,12 +8,23 @@
     {
       "name": "prompt-timestamp",
       "description": "Stamps every user prompt with the current date and time, giving Claude real time-awareness throughout the session",
-      "version": "1.1.1",
+      "version": "1.1.2",
       "author": {
         "name": "Ray Chao",
         "email": "ray.chao@oao.tw"
       },
-      "source": "./",
+      "source": "./plugins/prompt-timestamp",
+      "category": "utilities"
+    },
+    {
+      "name": "turn-stamp",
+      "description": "Prints a human-visible ⏱ HH:MM stamp at the end of every Claude Code turn — display only, zero tokens",
+      "version": "1.0.0",
+      "author": {
+        "name": "Ray Chao",
+        "email": "ray.chao@oao.tw"
+      },
+      "source": "./plugins/turn-stamp",
       "category": "utilities"
     }
   ]

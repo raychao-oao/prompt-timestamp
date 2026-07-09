@@ -76,9 +76,17 @@ Add this to `~/.claude/settings.json`:
 
 > **Note:** don't run both the plugin and the settings.json hook — you'll get double timestamps.
 
-## Bonus: human-visible turn stamps
+## Bonus: human-visible turn stamps (`turn-stamp`)
 
-This plugin feeds time to the **model**. If you also want a timestamp *you* can see at the end of each turn, add a `Stop` hook to `~/.claude/settings.json`:
+`prompt-timestamp` feeds time to the **model**. If you also want a timestamp *you* can see at the end of each turn, this repo ships a second plugin from the same marketplace:
+
+```bash
+claude plugin install turn-stamp@prompt-timestamp
+```
+
+Each turn then ends with a one-line `⏱ 10:35` in the UI. The `systemMessage` goes to your screen only — it never enters the model's context, so it costs zero tokens. The two plugins are independent: install either one, or both.
+
+Prefer raw settings? Add this to `~/.claude/settings.json` instead:
 
 ```json
 {
@@ -99,7 +107,7 @@ This plugin feeds time to the **model**. If you also want a timestamp *you* can 
 }
 ```
 
-Each turn ends with a one-line `⏱ 10:35` in the UI. The `systemMessage` goes to your screen only — it never enters the model's context, so it costs zero tokens.
+> **Note:** don't run both the `turn-stamp` plugin and the settings.json hook — you'll get double stamps.
 
 Or let AI do this for you — paste this into Claude Code:
 

@@ -1,0 +1,17 @@
+{
+  "description": "Print a human-visible ⏱ HH:MM stamp at the end of every turn (systemMessage — screen only, zero tokens)",
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '{\"systemMessage\":\"⏱ %s\"}\\n' \"$(date '+%H:%M')\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

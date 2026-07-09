@@ -1,7 +1,7 @@
 {
   "name": "prompt-timestamp",
   "description": "Stamps every user prompt with the current date and time, giving Claude real time-awareness throughout the session",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": {
     "name": "Ray Chao",
     "email": "ray.chao@oao.tw"

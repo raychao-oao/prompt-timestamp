@@ -1,0 +1,13 @@
+{
+  "name": "turn-stamp",
+  "description": "Prints a human-visible ⏱ HH:MM stamp at the end of every Claude Code turn — display only, zero tokens",
+  "version": "1.0.0",
+  "author": {
+    "name": "Ray Chao",
+    "email": "ray.chao@oao.tw"
+  },
+  "homepage": "https://github.com/raychao-oao/prompt-timestamp",
+  "repository": "https://github.com/raychao-oao/prompt-timestamp",
+  "license": "MIT",
+  "keywords": ["hooks", "timestamp", "display", "stop-hook"]
+}
