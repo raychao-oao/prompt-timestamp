@@ -101,6 +101,13 @@ This plugin feeds time to the **model**. If you also want a timestamp *you* can 
 
 Each turn ends with a one-line `⏱ 10:35` in the UI. The `systemMessage` goes to your screen only — it never enters the model's context, so it costs zero tokens.
 
+Or let AI do this for you — paste this into Claude Code:
+
+```
+Read the Bonus section of https://github.com/raychao-oao/prompt-timestamp
+and add the Stop hook it describes to my ~/.claude/settings.json.
+```
+
 Related built-ins worth knowing: `"showMessageTimestamps": true` in settings shows per-message arrival times in the transcript view (`Ctrl+O`), and turn durations ("Cooked for 16s") are on by default.
 
 ## License
