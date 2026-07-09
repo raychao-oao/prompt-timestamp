@@ -76,6 +76,33 @@ Add this to `~/.claude/settings.json`:
 
 > **Note:** don't run both the plugin and the settings.json hook — you'll get double timestamps.
 
+## Bonus: human-visible turn stamps
+
+This plugin feeds time to the **model**. If you also want a timestamp *you* can see at the end of each turn, add a `Stop` hook to `~/.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '{\"systemMessage\":\"⏱ %s\"}\\n' \"$(date '+%H:%M')\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Each turn ends with a one-line `⏱ 10:35` in the UI. The `systemMessage` goes to your screen only — it never enters the model's context, so it costs zero tokens.
+
+Related built-ins worth knowing: `"showMessageTimestamps": true` in settings shows per-message arrival times in the transcript view (`Ctrl+O`), and turn durations ("Cooked for 16s") are on by default.
+
 ## License
 
 MIT
