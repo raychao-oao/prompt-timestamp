@@ -118,6 +118,32 @@ and add the Stop hook it describes to my ~/.claude/settings.json.
 
 Related built-ins worth knowing: `"showMessageTimestamps": true` in settings shows per-message arrival times in the transcript view (`Ctrl+O`), and turn durations ("Cooked for 16s") are on by default.
 
+## Other tools: Codex CLI
+
+Codex CLI supports the same hook, just with a different output schema — `UserPromptSubmit` there requires JSON, not plain stdout. Add this to `~/.codex/hooks.json`:
+
+```json
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ts=$(date '+[%Y-%m-%d %H:%M %z | calculate time since previous stamp]'); printf '{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":\"%s\"}}\\n' \"$ts\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+After editing, run `/hooks` inside Codex CLI to review and trust the change.
+
+No `turn-stamp` equivalent is needed here — Codex prints hook output directly to the terminal, so it's already visible without a separate display hook.
+
 ## License
 
 MIT
