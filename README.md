@@ -30,6 +30,12 @@ claude plugin marketplace add raychao-oao/prompt-timestamp
 claude plugin install prompt-timestamp@prompt-timestamp
 ```
 
+Or skip the plugin entirely and paste this into Claude Code — it will set the hook up for you:
+
+```
+Read https://github.com/raychao-oao/prompt-timestamp and set up the hook it describes.
+```
+
 Restart Claude Code after installing (hooks load at session start).
 
 ## What it does
