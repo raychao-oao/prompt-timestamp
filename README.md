@@ -219,6 +219,12 @@ Because the stamp is emitted as ordinary Markdown in the reply body, `agy` rende
 
 **Trade-off vs. the hook-based versions**: this is instruction-following, not a guaranteed mechanism. A hook always fires; a Rule can be forgotten by the model on a given turn, especially in long sessions or after context compaction. If the `⏱` line stays consistent in practice, leave it as-is — but this is inherently less reliable than `turn-stamp`'s Stop hook.
 
+## Related: time-awareness during autonomous tool calls
+
+`prompt-timestamp` only refreshes on `UserPromptSubmit` — it stamps the gap *between human messages*. It has no visibility into a different gap: long stretches of autonomous tool calls (Bash, browser automation, etc.) with no human message in between, where the model's sense of "now" goes stale mid-task.
+
+If that's a problem you actually have — long unattended agent loops, not regular back-and-forth chat — see [evnchn-agentic/claude-code-time-awareness](https://github.com/evnchn-agentic/claude-code-time-awareness), which solves it with a `PostToolUse` hook instead, re-stamping after every `Bash`/browser tool call. It's a complementary approach, not a replacement: the two solve different gaps, and the `PostToolUse` approach fires far more often (per tool call, not per message), so it's a deliberate trade of higher token cost for continuous coverage during unattended runs.
+
 ## License
 
 MIT
