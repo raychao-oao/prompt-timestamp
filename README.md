@@ -19,7 +19,7 @@ LLMs have no clock. Claude Code injects today's date **once, at session start** 
 - **Freshness judgment fails.** Whether a status check from "earlier" is 5 minutes or 5 hours old changes whether it should be re-verified. The model can't tell.
 - **Log correlation is blind.** Paste a log with timestamps and the model can't align it with "now".
 
-This plugin fixes all of that with a single `UserPromptSubmit` hook: every message you send carries a timestamp, so the model always knows the current time — and how much time passed between messages.
+This plugin fixes all of that with a `UserPromptSubmit` hook: every message you send carries a timestamp, so the model always knows the current time — and how much time passed between messages. Optional turn-ending stamps make long terminal sessions easier for humans to scan too.
 
 Cost: ~10 tokens per message. Effectively free.
 
@@ -51,6 +51,13 @@ The output is injected as context alongside your message. The `%z` offset (`+080
 The `| calculate time since previous stamp` part is a **static hint, not a computed value**: the previous timestamp already lives in the conversation history, so the model can derive the gap itself. No state file, no cross-session bookkeeping, no concurrency issues — the context window *is* the state.
 
 That's the whole plugin. No dependencies, no network access, no state.
+
+Two different timestamps solve two different problems:
+
+| Stamp | Who sees it | Why it exists |
+| --- | --- | --- |
+| Prompt timestamp | The model | Lets the assistant reason about current time and elapsed time between user messages |
+| Turn stamp | You | Gives long terminal sessions a visible "this reply ended here" marker |
 
 ## Prefer raw settings over a plugin?
 
@@ -120,7 +127,7 @@ Related built-ins worth knowing: `"showMessageTimestamps": true` in settings sho
 
 ## Other tools: Codex CLI
 
-Codex CLI supports the same hook, just with a different output schema — `UserPromptSubmit` there requires JSON, not plain stdout. Add this to `~/.codex/hooks.json`:
+Codex CLI supports the same model-facing hook, just with a different output schema — `UserPromptSubmit` there requires JSON, not plain stdout. Add this to `~/.codex/hooks.json`:
 
 ```json
 {
@@ -130,7 +137,7 @@ Codex CLI supports the same hook, just with a different output schema — `UserP
         "hooks": [
           {
             "type": "command",
-            "command": "ts=$(date '+[%Y-%m-%d %H:%M %z | calculate time since previous stamp]'); printf '{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":\"%s\"}}\\n' \"$ts\"",
+            "command": "date '+{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":\"[%Y-%m-%d %H:%M %z | calculate time since previous stamp]\"}}'",
             "timeout": 5
           }
         ]
@@ -142,7 +149,55 @@ Codex CLI supports the same hook, just with a different output schema — `UserP
 
 After editing, run `/hooks` inside Codex CLI to review and trust the change.
 
-No `turn-stamp` equivalent is needed here — Codex prints hook output directly to the terminal, so it's already visible without a separate display hook.
+If you also want a human-visible marker when each assistant reply finishes, add a `Stop` hook too:
+
+```json
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "date '+{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":\"[%Y-%m-%d %H:%M %z | calculate time since previous stamp]\"}}'",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "date '+{\"continue\":false,\"stopReason\":\"reply ended at [%Y-%m-%d %H:%M %z]\"}'",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+The `UserPromptSubmit` stamp goes into model context. The `Stop` stamp is for you: Codex renders it after the assistant finishes, like this:
+
+```text
+• Stop hook (stopped)
+  stop: reply ended at [2026-07-10 18:20 +0800]
+```
+
+Restart Codex after adding a new hook event such as `Stop`; existing sessions may not pick up newly added event types. The examples use `date` to emit the whole JSON object, which avoids inline shell variables and quoting problems.
+
+Codex schema notes:
+
+- `UserPromptSubmit` output must be JSON, not raw text.
+- `additionalContext` belongs under `hookSpecificOutput`.
+- `hookSpecificOutput.hookEventName` must match the event name.
+- Do not output `"decision":"allow"`; Codex only accepts blocking decisions there.
+- The `Stop` hook example intentionally uses `continue:false` because that is what makes Codex render the visible `stop:` line after the assistant reply has finished.
+
+Both Codex examples are inline commands. No extra script file is required.
 
 ## Other tools: Antigravity CLI (`agy`)
 
