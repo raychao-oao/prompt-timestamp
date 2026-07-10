@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "printf '{\"systemMessage\":\"⏱ %s\"}\\n' \"$(date '+%H:%M')\"",
+            "command": "printf '{\"systemMessage\":\"⏱ %s\"}\\n' \"$(date '+%Y-%m-%d %H:%M')\"",
             "timeout": 5
           }
         ]

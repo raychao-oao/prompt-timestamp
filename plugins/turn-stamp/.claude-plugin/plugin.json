@@ -1,7 +1,7 @@
 {
   "name": "turn-stamp",
-  "description": "Prints a human-visible ⏱ HH:MM stamp at the end of every Claude Code turn — display only, zero tokens",
-  "version": "1.0.0",
+  "description": "Prints a human-visible ⏱ date + time stamp at the end of every Claude Code turn — display only, zero tokens",
+  "version": "1.1.0",
   "author": {
     "name": "Ray Chao",
     "email": "ray.chao@oao.tw"

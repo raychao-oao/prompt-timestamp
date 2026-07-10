@@ -84,7 +84,7 @@ Add this to `~/.claude/settings.json`:
 claude plugin install turn-stamp@prompt-timestamp
 ```
 
-Each turn then ends with a one-line `⏱ 10:35` in the UI. The `systemMessage` goes to your screen only — it never enters the model's context, so it costs zero tokens. The two plugins are independent: install either one, or both.
+Each turn then ends with a one-line `⏱ 2026-07-10 10:35` in the UI. The `systemMessage` goes to your screen only — it never enters the model's context, so it costs zero tokens. The two plugins are independent: install either one, or both.
 
 Prefer raw settings? Add this to `~/.claude/settings.json` instead:
 
@@ -97,7 +97,7 @@ Prefer raw settings? Add this to `~/.claude/settings.json` instead:
         "hooks": [
           {
             "type": "command",
-            "command": "printf '{\"systemMessage\":\"⏱ %s\"}\\n' \"$(date '+%H:%M')\"",
+            "command": "printf '{\"systemMessage\":\"⏱ %s\"}\\n' \"$(date '+%Y-%m-%d %H:%M')\"",
             "timeout": 5
           }
         ]
