@@ -144,6 +144,26 @@ After editing, run `/hooks` inside Codex CLI to review and trust the change.
 
 No `turn-stamp` equivalent is needed here — Codex prints hook output directly to the terminal, so it's already visible without a separate display hook.
 
+## Other tools: Antigravity CLI (`agy`)
+
+`agy` already injects the current local time into every prompt's `<ADDITIONAL_METADATA>` (`The current local time is: ...`), so no `PreInvocation` hook is needed for the model-facing half. And its Stop-hook path is actively hostile to printing: `agy`'s TUI repaints the screen buffer on every turn, so a literal `\n` from a hook scrambles the readline cursor, and an ANSI-positioned line gets wiped by the next repaint anyway.
+
+The fix that works: skip hooks entirely and add two Rules to `~/.gemini/GEMINI.md` (agy's global instructions file), so the model does the timestamping itself as part of its normal reply text:
+
+```markdown
+## Time-Awareness
+- Every time the user speaks, compare the `The current local time is` timestamp in the current and prior `<ADDITIONAL_METADATA>` blocks.
+- Actively compute and stay aware of elapsed time between turns, to judge system state, log freshness, and whether re-verification is needed.
+
+## Turn-Stamp Rule
+- So the user can see the time of each turn in the terminal, print a small timestamp on the last line of every reply, formatted as: `⏱ YYYY-MM-DD HH:MM`.
+- Base it on the local time from that turn's `<ADDITIONAL_METADATA>`.
+```
+
+Because the stamp is emitted as ordinary Markdown in the reply body, `agy` renders it natively — no cursor or input-box interference.
+
+**Trade-off vs. the hook-based versions**: this is instruction-following, not a guaranteed mechanism. A hook always fires; a Rule can be forgotten by the model on a given turn, especially in long sessions or after context compaction. If the `⏱` line stays consistent in practice, leave it as-is — but this is inherently less reliable than `turn-stamp`'s Stop hook.
+
 ## License
 
 MIT
